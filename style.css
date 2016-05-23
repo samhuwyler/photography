@@ -20,8 +20,26 @@ html, body
 }
 
 img {
+	image-orientation: 0deg;
     image-orientation: from-image;
+}
+
+@font-face
+{
+	font-family: 'Gravity-Book';
+	src: url('font/Gravity-Book/fonts/Gravity-Book.eot');
+	src: local('☺'), url('font/Gravity-Book/fonts/Gravity-Book.woff') format('woff'), url('font/Gravity-Book/fonts/Gravity-Book.ttf') format('truetype'), url('font/Gravity-Book/fonts/Gravity-Book.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }	
+
+@font-face {
+	font-family: 'Gravity-UltraLight';
+	src: url('font/Gravity-UltraLight/fonts/Gravity-UltraLight.eot');
+	src: local('☺'), url('font/Gravity-UltraLight/fonts/Gravity-UltraLight.woff') format('woff'), url('font/Gravity-UltraLight/fonts/Gravity-UltraLight.ttf') format('truetype'), url('font/Gravity-UltraLight/fonts/Gravity-UltraLight.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 
 /*CLASS*/
 
@@ -49,6 +67,7 @@ img {
 {
 	margin: 10px;
 	height: auto;
+	cursor: pointer;
 	
 	-webkit-box-shadow: 0 0 10px -3px #000000;
 	box-shadow: 0 0 10px -3px #000000;
@@ -64,36 +83,80 @@ img {
 
 #start
 {
+	position: fixed;
+	top: 0px;
 	width: 100%;
 	height: 100vh;
 	background-color: #222;
 	/*background-image: url('./media/start/152152.jpg');*/ 
+	background-size: cover;
+	
+	z-index:10000;
+	
+	-webkit-box-shadow: 0 0 10px -3px #000000;
+	box-shadow: 0 0 10px -3px #000000;
+	
+	-webkit-transition:opacity 1s, top 1.2s;  
+    -moz-transition:opacity 1s, top 1.2s;   
+    -o-transition: opacity 1s, top 1.2s;   
+    transition:opacity  1s, top 1.2s; 
+}
 
-	-webkit-transition:opacity 1s;  
-    -moz-transition:opacity 1s;  
-    -o-transition: opacity 1s;  
-    transition:opacity  1s;
+#loadingcover
+{
+	width: 100vw; height: 100vh;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	background-color: #222;
+	
+	z-index: 10000;
+	
+	transition: opacity 2s;
+}
+
+#startlogo
+{
+	position: absolute;
+	width: 100vw;
+	height: 60px;
+	top: 38vh;
+	/*background-image: url("media/img/LogoTrans6.png");
+	background-position: center center;
+	background-size: contain;
+	background-repeat: no-repeat;*/
+	
+	color: #fff;
+	text-align: center;
+	font-size: 60px;
+	font-family: 'Gravity-Book';
+	
+	z-index: 20000;
+}
+
+.light
+{
+	font-family: 'Gravity-UltraLight';
 }
 
 #logo	
 {
-	font-family: arial, helvetica, sans-serif;
-	font-size: 50px;
-	color: white;
+	color: #fff;
 	text-align: center;
-	font-weight: bold;
+	font-size: 60px;
+	font-family: 'Gravity-Book';
 	
 	position: absolute;
 	
-	top:38vh;
+	padding-top:20px;
 	width: 100vw;
+	height: 90px;
+	background-color: #222;
 	
-	z-index: 30000;
+	z-index: 3000;
 	
-	-webkit-transition:opacity .25s;  
-    -moz-transition:opacity .25s;  
-    -o-transition: opacity .25s;  
-    transition:opacity .25s;
+	transition: background-color .3s linear;
+	box-shadow: 0 0 10px -3px #000;
 }
 
 #container
@@ -102,14 +165,14 @@ img {
 	height: 100vh;
 	background-color: white;
 	position: fixed;
-	top: 100vh;
+	top: 0px;
 	
-	z-index: 10000;
+	z-index: 1000;
 		
 	/*-webkit-transition:top 1s, background-color .3s linear;  
     -moz-transition:top 1s, background-color .3s linear;  
     -o-transition: top 1s, background-color .3s linear;  
-    transition:top 1s, background-color .3s linear; 	*/
+    transition:top 1s, background-color .3s linear; */
 	
 	-webkit-transition:top 1s;
     -moz-transition:top 1s;
@@ -121,11 +184,10 @@ img {
 #header
 {
 	position: fixed;
-	height: 150px;
+	height: 100px;
 	width: 100%;
 	background: #222;
-	opacity: 0;
-	top: -150px;
+	z-index: 2000;
 	
 	-webkit-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
 	-moz-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
@@ -146,9 +208,10 @@ img {
 	height: 25px;
 	width: 360px;
 	text-align: center;
-	opacity: 0;
 	
 	font-family: 'sofia_prolight';
+	
+	z-index: 10000;
 	
 	-webkit-transition:opacity .75s;  
     -moz-transition:opacity .75s;  
@@ -181,8 +244,8 @@ img {
 #scroll
 {
 	width: 80vw;
-	height: calc(100vh - 170px);
-	margin-top: 150px;
+	height: calc(100vh - 120px);
+	margin-top: 100px;
 	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
@@ -190,7 +253,7 @@ img {
 
 #content
 {
-	height: calc(100vh - 170px);
+	height: calc(100vh - 120px);
 	min-width: 270px;
 	margin-left: auto;
 	margin-right: auto;
@@ -203,8 +266,6 @@ img {
 	overflow-x: scroll;
 	padding-right: 10px;
 	
-	opacity: 0;
-	
 	-webkit-transition:opacity .25s;  
     -moz-transition:opacity .25s;  
     -o-transition: opacity .25s;  
@@ -216,24 +277,35 @@ img {
 	position: fixed;
 	width: 100vw;
 	height: 150px;
-	bottom: -150px;
+	bottom: -130px;
 	left:0px;
 	margin: 0px;
 	background-color: #222;
 	
-	z-index: 10000;
+	z-index: 1000;
 	
 	transition: bottom .2s, background-color .3s linear;  
 	
 }
 
+#slideshowCover
+{
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	background-color: #222;
+	opacity: 0;
+	pointer-events: none;
+	z-index: 100;
+	
+	transition: opacity .4s;
+}
+
 #slideshow
 {
 	position: fixed;
-	top: 180px;
-	
-	
-	
+	top: 145px;
+	z-index:1100;
 	opacity: 0;
 	
 	-webkit-transition:opacity .5s;  
@@ -244,24 +316,82 @@ img {
 
 #next
 {
-	top: 180px;
+	top: 145px;
 	right: 0px;
 	position: absolute;
 	cursor: pointer;
+	opacity: .5;
+	
+	z-index: 1110;
+	
+	transition: opacity .75s;
+}
+
+#next:hover
+{
+	opacity: 1;
 }
 
 #prev
 {
-	top: 180px;
+	top: 145px;
 	left: 0px;
 	position: absolute;
 	cursor: pointer;
+	opacity: .5;
+	
+	z-index: 1110;
+	
+	transition: opacity .75s;
+}
+
+#prev:hover
+{
+	opacity: 1;
+}
+
+#next-canvas
+{
+	position: absolute;
+	height: 100px;
+	width: 40px;
+	right: 20px;
+}
+
+#prev-canvas
+{
+	position: absolute;
+	height: 100px;
+	width: 40px;
+	left: 20px;
+}
+
+#closeimg
+{
+	position: absolute;
+	z-index: 50000;
+	background-color: #000;
+	opacity: 0;
+	margin-top: -20px;
+	cursor: pointer;
+	text-align:center;
+	color: #fff;
+	font-family: 'Gravity-UltraLight';
+	font-size: 40px;
+	
+	transition: opacity .4s;
+}
+
+#closeimg:hover
+{
+	opacity: .5;
 }
 
 #cimg
 {
 	position: absolute;
 	opacity: 0;
+	cursor: pointer;
 	
 	-webkit-transition:opacity .2s;  
     -moz-transition:opacity .2s;  

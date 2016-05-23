@@ -2,10 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="UTF-8">
-		<title>Samuel Huwyler</title>
+		<title>huwyler photografie</title>
 		<link rel="stylesheet" href="style.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-		<link rel="stylesheet" href="./sofiapro/stylesheet.css" type="text/css" charset="utf-8" />
+		<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+		<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+		<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="/manifest.json">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body onload="fOnload()" onresize="fResize()">
 		<script type="text/javascript" language="javascript">
@@ -26,7 +44,9 @@
 			{
 				getBG();
 				getRows(HOME);
-				setTimeout(function(){ get("start").style.opacity = "0"; }, 300);
+				setTimeout(
+					function(){ get("loadingcover").style.opacity = "0"; 
+				}, 300);
 			}
 			
 			function get(element)
@@ -96,32 +116,69 @@
 			
 			function setSlideshow(path)
 			{
-				get("slideshow").style.height = (get("scroll").clientHeight - 60) + "px";
+				get("slideshow").style.height = (get("scroll").clientHeight - 80) + "px";
 				get("slideshow").style.width = get("scroll").clientWidth + "px";
 				
 				var cimg = document.createElement('img');
 				cimg.src = PATHTOMEDIA + HOME + "/" + path;
-				cimg.setAttribute('onclick', 'hideSlideshow()');
 				cimg.setAttribute('onload', 'setTimeout(function(){get("slideshow").style.opacity="1"}, 50)');
 				cimg.id = "cimg";
 				
 				get("slideshow").appendChild(cimg);
 				
-				setTimeout(function() {sizeImg(cimg, rdiv, ldiv) }, 200);
+				var closebtn = document.createElement('div');
+				closebtn.id = "closeimg";
+				
+				setTimeout(function() {sizeImg(cimg, rdiv, ldiv, closebtn) }, 200);
 				cimg.className = "slidImg";
 			
 				var rdiv = document.createElement('div');
+				var rcanvas = document.createElement('canvas');
 				rdiv.id = "next";
+				rcanvas.id = "next-canvas";
 				rdiv.setAttribute('onclick', 'nextClickTimer(true)');
 				rdiv.style.height = get("slideshow").clientHeight;
+				rcanvas.style.marginTop = ((get("slideshow").clientHeight / 2) -50) + "px";
+				rdiv.appendChild(rcanvas);
 				get("container").appendChild(rdiv);
 				setTimeout(function() {createNextImg(false)}, 300);
 				
+				drawArrow(rcanvas, true);
+				
 				var ldiv = document.createElement('div');
+				var lcanvas = document.createElement('canvas');
 				ldiv.id = "prev";
+				lcanvas.id = "prev-canvas";
 				ldiv.setAttribute('onclick', 'nextClickTimer(false)');
 				ldiv.style.height = get("slideshow").clientHeight;
+				lcanvas.style.marginTop = ((get("slideshow").clientHeight / 2) -50) + "px";
+				ldiv.appendChild(lcanvas);
 				get("container").appendChild(ldiv);
+				
+				drawArrow(lcanvas, false);
+			}
+			
+			function drawArrow(objcanvas, boolright)
+			{
+				if(boolright){
+					var ctx = objcanvas.getContext("2d");
+					ctx.strokeStyle="#fff";
+					ctx.lineWidth = 2;
+					ctx.moveTo(0,0);
+					ctx.lineTo(200,50);
+					ctx.lineTo(0,100);
+					ctx.stroke();
+				}
+				else
+				{
+					var ctx = objcanvas.getContext("2d");
+					ctx.strokeStyle="#fff";
+					ctx.lineWidth = 2;
+					ctx.moveTo(200,0);
+					ctx.lineTo(0,50);
+					ctx.lineTo(200,100);
+					ctx.stroke();
+				}
 			}
 			
 			//bool2run = false   -> firstrun (next)
@@ -139,7 +196,7 @@
 								
 				var nextImg = document.createElement('img');
 				nextImg.src = getNextImg(pOn);
-				nextImg.setAttribute('onclick', 'hideSlideshow()');
+				//nextImg.setAttribute('onclick', 'hideSlideshow()');
 				nextImg.id = id;
 				get("slideshow").appendChild(nextImg);					
 				
@@ -149,7 +206,7 @@
 				}
 			}
 			
-			function sizeImg(cimg, nextDiv, prevDiv)
+			function sizeImg(cimg, nextDiv, prevDiv, closeDiv)
 			{
 				//size Img	
 				if(cimg.clientHeight > cimg.clientWidth)
@@ -175,6 +232,22 @@
 				//position Img
 				cimg.style.left = (get("slideshow").clientWidth / 2) - (cimg.clientWidth / 2) + "px";		
 				
+				setTimeout(function(){ sizeCtrl(closeDiv, nextDiv, prevDiv)}, 100);
+			}
+			
+			function sizeCtrl(closeDiv, nextDiv, prevDiv)
+			{
+				//size and pos closebtn
+				//closeDiv.style.height = cimg.clientHeight + "px";
+				closeDiv.style.width = cimg.clientWidth + "px";
+				closeDiv.style.left = cimg.style.left;
+				closeDiv.setAttribute('onclick', 'hideSlideshow()');
+				closeDiv.innerHTML = "close";
+				var paddingTop = ((cimg.clientHeight / 2) - 40); 
+				closeDiv.style.paddingTop = paddingTop + "px";
+				closeDiv.style.height = (cimg.clientHeight - paddingTop) + "px";
+				get("slideshow").appendChild(closeDiv);
+				
 				//size and pos next button
 				nextDiv.style.width = (window.innerWidth / 2) - (cimg.width / 2) + "px";
 				nextDiv.style.height = cimg.height + "px";
@@ -186,9 +259,9 @@
 			function nextClickTimer(boolNext)
 			{
 				get("cimg").style.opacity="0";
-				setTimeout(function(){switchImg(boolNext)}, 200);
+				setTimeout(function(){switchImg(boolNext)}, 100);
 				setTimeout(function(){createNextImg(false)}, 300);
-				setTimeout(function(){sizeImg(get("cimg"), get("next"), get("prev"))}, 310);
+				setTimeout(function(){sizeImg(get("cimg"), get("next"), get("prev"), get("closeimg"))}, 310);
 				setTimeout(function(){get("cimg").style.opacity="1"}, 500);
 			}
 			
@@ -242,9 +315,11 @@
 			function hideSlideshow()
 			{
 				slideshowShown = false;
+				get("closeimg").style.opacity = "0";
 				get("slideshow").style.opacity = "0";
 				get("container").removeChild(get("next"));
 				get("container").removeChild(get("prev"));
+				get("slideshow").removeChild(get("closeimg"));
 				setTimeout(function() { get("content").style.opacity = "1"}, 0);
 				setTimeout(function() { clearSS()}, 500);
 				
@@ -266,12 +341,13 @@
 			
 			function getBG()
 			{
-				xmlhttp.open("POST", "./media/start/startbglist.txt", false);
+				
+				xmlhttp.open("POST", "media/start/startbglist.txt", false);
 				xmlhttp.send();
 				
 				var strArrBG = xmlhttp.responseText.split(";");
-				var strUrlBG = "./media/start/" + strArrBG[randomize(strArrBG.length)-1];					
-				document.body.style.backgroundImage = "url('" + strUrlBG + "')";
+				var strUrlBG = "media/start/" + strArrBG[randomize(strArrBG.length)-1];					
+				get("start").style.backgroundImage = "url('" + strUrlBG + "')";
 			}
 			
 			function showHeader()
@@ -285,7 +361,11 @@
 			
 			function bgGetOutDaWay()
 			{
-				bgShown = false;
+				get("start").style.top="-100vh";
+				
+				
+				
+				/*bgShown = false;
 				document.body.style.backgroundPosition = "center -" + 100 + "vh";
 				get("container").style.top = "0vh";
 				get("logo").style.opacity = "0";
@@ -295,7 +375,7 @@
 				setTimeout(function (){
 					get("footer").style.bottom="-130px";
 					get("content").style.opacity="1";
-				}, 200);
+				}, 200);*/
 			}
 			
 			function menuClick(mId)
@@ -370,7 +450,7 @@
 				setSlideshow(strPath);
 				darkenBody(true);
 				
-				setTimeout(function() { get("cimg").style.opacity = "1" }, 200);
+				setTimeout(function() { get("cimg").style.opacity = "1" }, 350);
 				get("content").style.opacity = "0";
 				
 				//setTimeout(function (){ get("slideshow").style.opacity="1"; }, 150);
@@ -382,15 +462,17 @@
 				{
 					setTimeout( function () 
 					{
-						get("container").style.backgroundColor="#222";  
-						get("header").style.backgroundColor="#000";
+						//get("container").style.backgroundColor="#222"; 
+						get("slideshowCover").style.opacity="1";
+						get("logo").style.backgroundColor="#000";
 						get("footer").style.backgroundColor="#000";
 					}, 80);
 				}
 				else
 				{
-					get("container").style.backgroundColor="#fff";
-					get("header").style.backgroundColor="#222";
+					//get("container").style.backgroundColor="#fff";
+					get("slideshowCover").style.opacity="0";
+					get("logo").style.backgroundColor="#222";
 					get("footer").style.backgroundColor="#222";
 				}
 			}
@@ -463,19 +545,23 @@
 			
 		</script>
 		
-		<div id="logo" ><img src="./media/img/LogoTrans6.png" /></div>
-		<div id="start" onclick="bgGetOutDaWay()"></div>
+		<div id="logo">huwyler <label class="light">fotografie</label></div>
+		<div id="start" onclick="bgGetOutDaWay()">
+			<div id="loadingcover"></div>
+			<div id="startlogo">huwyler <label class="light">fotografie</label></div>
+		</div>
 		
 		<div id="container">
-			<div id="header">
-				<div id="menu">
+			<!--div id="header"-->
+				<!--div id="menu">
 					<div id="m01" class="mp" onclick="menuClick(this.id)">home</div>
 					<div id="m02" class="mp" onclick="menuClick(this.id)">projects</div>
 					<div id="m03" class="mp" onclick="menuClick(this.id)">menu 3</div>
 					<div id="m04" class="mp" onclick="menuClick(this.id)">about</div>
 					<div id="selector">home</div>
 				</div>
-			</div>
+			</div-->
+			<div id="slideshowCover"></div>
 			<div id="scroll">
 				<div id="content">
 				</div>
